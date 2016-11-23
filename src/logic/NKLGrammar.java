@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import container.NKLRule;
+
 public class NKLGrammar {
 	
-	private HashMap<String, ArrayList<String>> productionRules;
+	private HashMap<String, HashMap<String,ArrayList<NKLRule>>> productionRules;
 	private Set<String> alphabet;
 	private Set<String> turtleAlphabet;
 	private String axiom;
@@ -26,9 +28,10 @@ public class NKLGrammar {
 	 * 		  the intersection of alphabet and turtleAlphabet has to be empty
 	 * 
 	 * @throws RuntimeException if axiom equals empty string or is null
-	 * @throws RuntimeException if intersection (set.retainAll) of alphabet and turtle alphabet is not empty 
+	 * @throws RuntimeException if intersection (set.retainAll) of alphabet and turtle alphabet is not empty
+	 *  
 	 */
-	public NKLGrammar(int n, int k, String axiom, HashMap<String, ArrayList<String>> productionRules,Set<String> alphabet, Set<String> turtleAlphabet){
+	public NKLGrammar(int n, int k, String axiom, HashMap<String,ArrayList<NKLRule>> productionRules,Set<String> alphabet, Set<String> turtleAlphabet){
 		this.n = n;
 		this.k = k;
 		
@@ -49,8 +52,62 @@ public class NKLGrammar {
 		intersection = null;
 		
 		this.axiom = axiom;
-		this.productionRules = productionRules;
 		
+		insertRules(productionRules);
+		
+	}
+	
+	/**
+	 * Insert rules into a HashMap ordered by alphabet symbol which contains another map for ordering
+	 * rules internally by context sensitivity information 
+	 * 
+	 * @param productionRules
+	 */
+	private void insertRules(HashMap<String,ArrayList<NKLRule>> productionRules){
+		for(String symb : productionRules.keySet()){
+			
+			if(!this.productionRules.containsKey(symb)){
+				this.productionRules.put(symb, new HashMap<String,ArrayList<NKLRule>>());
+			}
+			
+			for(NKLRule rule : productionRules.get(symb)){
+				String contextSensitivity = rule.getN() + "," + rule.getK();
+				
+				
+				if(this.productionRules.get(symb).containsKey(contextSensitivity)){
+					this.productionRules.get(symb).get(contextSensitivity).add(rule);
+				}else{
+					ArrayList<NKLRule> rules = new ArrayList<>();
+					this.productionRules.get(symb).put(contextSensitivity, rules);
+				}
+				
+			}
+			
+		}
+	}
+
+	public HashMap<String, HashMap<String,ArrayList<NKLRule>>> getProductionRules() {
+		return productionRules;
+	}
+
+	public Set<String> getAlphabet() {
+		return alphabet;
+	}
+
+	public Set<String> getTurtleAlphabet() {
+		return turtleAlphabet;
+	}
+
+	public String getAxiom() {
+		return axiom;
+	}
+
+	public int getN() {
+		return n;
+	}
+
+	public int getK() {
+		return k;
 	}
 
 }
