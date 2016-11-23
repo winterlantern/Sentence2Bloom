@@ -78,7 +78,7 @@ public class LSystemGenerator {
 		}else{
 			for(int i = n; i >= 0; i--){
 				for(int j = k; j >= 0; j--){
-					//TODO implement algo
+					//TODO implement algo, for loop -> wrong
 				}
 			}
 		}
