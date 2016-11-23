@@ -14,7 +14,7 @@ public class NKLGrammar {
 	private int n,k;
 	
 	/**
-	 * NLKGrammar describes a generic (N,L) L System
+	 * NLKGrammar describes a generic (N,K) L System
 	 * @param n context sensitivity of n chars to the left
 	 * @param k context sensitivity of k chars to the right
 	 * @param axiom nonempty string consisting of elements from alphabet unified with {[,]} 
@@ -33,7 +33,7 @@ public class NKLGrammar {
 		this.k = k;
 		
 		if(axiom == null || "".equals(axiom)){
-			throw new RuntimeException("Axiom can't null or the empty string");	
+			throw new RuntimeException("Axiom can't be null or the empty string");	
 		}
 		
 		
